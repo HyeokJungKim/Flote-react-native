@@ -8,7 +8,8 @@ from "native-base";
 export default class Note extends Component {
 
   editCard = () => {
-    this.props.noteEdit(this.props.note)
+    
+    this.props.noteEdit(this.props.note, this.props.index)
   }
 
   render() {

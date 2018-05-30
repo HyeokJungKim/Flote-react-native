@@ -73,27 +73,27 @@ export default class NewNote extends Component {
 
 
 
-
-
-  sendMessage = () => {
-      const note = this.state.body
-      const room = this.props.userid
-      // Call perform or send
-      this.refs.noteChannel.send({note, room})
-  }
-
-
-
+  //
+  //
+  // sendMessage = () => {
+  //     const note = this.state.body
+  //     const room = this.props.userid
+  //     // Call perform or send
+  //     this.refs.noteChannel.send({note, room})
+  // }
 
 
 
 
+
+
+  // <ActionCable ref='noteChannel' channel={{channel: 'NoteChannel', room: this.props.userid, username: this.props.username }} />
 
   // const {navigate} = this.props.navigation
   render(){
     return(
     <Container>
-      <ActionCable ref='noteChannel' channel={{channel: 'NoteChannel', room: this.props.userid, username: this.props.username }} />
+
          <Header>
            <Left />
            <Body>

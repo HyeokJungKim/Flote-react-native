@@ -73,7 +73,7 @@ export default class EditNote extends Component {
     return(
       <Container>
 
-        <ActionCable ref='realTimeTypingChannel' channel={{channel: 'RealTimeTypingChannel', room: this.props.note.id, username: `${this.state.username}`}} onReceived={this.props.onEdit} />
+        <ActionCable ref='realTimeTypingChannel' channel={{channel: 'RealTimeTypingChannel', room: this.props.note.id, username: this.props.username}} onReceived={this.props.onEdit} />
         <ActionCable ref='editChannel' channel={{channel: 'EditChannel', room: this.props.note.id, username: `${this.state.username}`}} />
 
          <Header>

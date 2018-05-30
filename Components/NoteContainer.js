@@ -45,6 +45,7 @@ export default class NoteContainer extends Component {
 
 
   onReceived = (note) => {
+    console.log('hit')
       this.setState({
           notes: [note,
               ...this.state.notes
@@ -57,7 +58,7 @@ export default class NoteContainer extends Component {
 
 
   render() {
-    let notes = this.state.notes.map((note) => <Note noteEdit={this.props.noteEdit} key={note.id} note={note}></Note>)
+    let notes = this.state.notes.map((note, index) => <Note noteEdit={this.props.noteEdit} index={index} key={note.id} note={note}></Note>)
     return (
       <Container>
         <ActionCable ref='noteChannel' channel={{channel: 'NoteChannel', room: this.props.userid, username: this.props.username}} onReceived={this.onReceived} />
