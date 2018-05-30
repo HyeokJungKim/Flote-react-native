@@ -18,7 +18,7 @@ export default class EditNote extends Component {
 
   handleBody = (event) => {
 
-    this.setState({body: event}, () => this.SendEdit())
+    this.setState({body: event}, () => this.sendMessage())
   }
 
   handleSubmit = () => {
@@ -55,7 +55,7 @@ export default class EditNote extends Component {
       })
   }
 
-  SendEdit = () => {
+  sendMessage = () => {
     const body = this.state.body
     const room = `edit_${this.props.note.id}`
     const index = this.props.index

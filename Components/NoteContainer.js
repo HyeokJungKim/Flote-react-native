@@ -54,13 +54,24 @@ export default class NoteContainer extends Component {
 
   }
 
-
+  onEdit = (note) => {
+      console.log('rt', note);
+      // if (note.user !== localStorage.getItem('username'))
+      this.setState({
+          notes:  [...this.state.notes.slice(0, note.index),
+             note,
+             ...this.state.notes.slice(note.index + 1)]
+        }
+      )
+    }
 
 
   render() {
-    let notes = this.state.notes.map((note, index) => <Note noteEdit={this.props.noteEdit} index={index} key={note.id} note={note}></Note>)
+    let notes = this.state.notes.map((note, index) => <Note onEdit={this.onEdit} username = {this.state.username} noteEdit={this.props.noteEdit} index={index} key={note.id} note={note}></Note>)
     return (
       <Container>
+
+
         <ActionCable ref='noteChannel' channel={{channel: 'NoteChannel', room: this.props.userid, username: this.props.username}} onReceived={this.onReceived} />
         <Header>
           <Body>
