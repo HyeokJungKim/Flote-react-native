@@ -1,13 +1,15 @@
 import React, {Component} from 'react'
 import { AsyncStorage, } from 'react-native'
 import { Container, Header, Left, Body, Title, Right, Content, Textarea, Form, Button, Text }from "native-base";
+import {ActionCable} from 'react-actioncable-provider'
 
 export default class EditNote extends Component {
 
   state={
     body: this.props.note.body,
     user_id: "",
-    token: ""
+    token: "",
+    username: ""
   }
 
   home = () => {
@@ -26,8 +28,8 @@ export default class EditNote extends Component {
 
   async getId() {
     try {
-      const value = await AsyncStorage.multiGet(['user_id', 'token']);
-      this.setState({user_id: value[0][1], token: value[1][1]})
+      const value = await AsyncStorage.multiGet(['user_id', 'token', 'username']);
+      this.setState({user_id: value[0][1], token: value[1][1], username: value[2][1]})
     } catch (error) {
       console.log("Error retrieving data" + error);
     }
@@ -70,6 +72,10 @@ export default class EditNote extends Component {
   render(){
     return(
       <Container>
+
+        <ActionCable ref='realTimeTypingChannel' channel={{channel: 'RealTimeTypingChannel', room: this.props.note.id, username: `${this.state.username}`}} onReceived={this.props.onEdit} />
+        <ActionCable ref='editChannel' channel={{channel: 'EditChannel', room: this.props.note.id, username: `${this.state.username}`}} />
+
          <Header>
            <Left />
            <Body>

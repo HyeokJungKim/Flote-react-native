@@ -49,6 +49,7 @@ export default class Login extends Component {
     .then(res => res.json())
     .then(json => {
       if(json.token){
+        this.props.setStorage(json)
         this.saveKey(json)
           .then(this.props.notesIndex())
       } else{

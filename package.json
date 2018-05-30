@@ -9,7 +9,9 @@
   "dependencies": {
     "native-base": "^2.4.5",
     "react": "16.3.1",
+    "react-actioncable-provider": "^1.0.3",
     "react-native": "0.55.4",
+    "react-native-actioncable": "0.0.3",
     "react-navigation": "^2.0.4"
   },
   "devDependencies": {

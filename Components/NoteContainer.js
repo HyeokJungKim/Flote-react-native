@@ -4,12 +4,15 @@ import
   { Container, Header, Title, Content, Body, Right, Footer, Button, Text, Left}
 from "native-base";
 import Note from './Note'
+import {ActionCable} from 'react-actioncable-provider'
+
 
 export default class NoteContainer extends Component {
   state ={
     notes: [],
     user_id: "",
-    token: ""
+    token: "",
+    username: ""
   }
 
   async getKey() {
@@ -20,6 +23,7 @@ export default class NoteContainer extends Component {
       console.log("Error retrieving data" + error);
     }
   }
+
 
   componentDidMount = () => {
     this.getKey()
@@ -37,10 +41,26 @@ export default class NoteContainer extends Component {
     })
   }
 
+
+
+
+  onReceived = (note) => {
+      this.setState({
+          notes: [note,
+              ...this.state.notes
+          ]
+      })
+
+  }
+
+
+
+
   render() {
     let notes = this.state.notes.map((note) => <Note noteEdit={this.props.noteEdit} key={note.id} note={note}></Note>)
     return (
       <Container>
+        <ActionCable ref='noteChannel' channel={{channel: 'NoteChannel', room: this.props.userid, username: this.props.username}} onReceived={this.onReceived} />
         <Header>
           <Body>
             <Title> Notes </Title>

@@ -7,6 +7,9 @@ import NoteContainer from './Components/NoteContainer'
 import Registration from './Components/Registration'
 import NewNote from './Components/NewNote'
 import EditNote from './Components/EditNote'
+import ActionCable from 'react-native-actioncable'
+import ActionCableProvider from 'react-actioncable-provider'
+
 // import ScreenManager from './Components/ScreenManager'
 // export default ScreenManager
 
@@ -14,6 +17,9 @@ type Props = {};
 export default class App extends Component<Props> {
   state={showing: "Home",
   note: {},
+  username: "",
+  user_id: "",
+  token: "",
   }
 
   async clearAsyncStorage() {
@@ -24,10 +30,13 @@ export default class App extends Component<Props> {
     }
   }
 
+  setStorage = (json) => {
+    this.setState({username: json.username, user_id: json.user_id, token: json.token})
+  }
 
   logOut = () => {
     this.clearAsyncStorage()
-      .then(this.setState({showing:"Home"}))
+      .then(this.setState({showing:"Home", username: "", user_id: "", token:""}))
   }
 
   notesIndex = () => {
@@ -49,16 +58,16 @@ export default class App extends Component<Props> {
   showing = () => {
     switch(this.state.showing){
       case "Notes":
-        return <NoteContainer noteEdit={this.noteEdit} logOut={this.logOut} newNote={this.newNote}></NoteContainer>
+        return <NoteContainer username={this.state.username} userid={this.state.user_id} token={this.state.token} noteEdit={this.noteEdit} logOut={this.logOut} newNote={this.newNote}></NoteContainer>
         break;
       case "Home":
-        return <Login registration={this.registration} notesIndex={this.notesIndex}></Login>
+        return <Login registration={this.registration} setStorage={this.setStorage} notesIndex={this.notesIndex}></Login>
         break;
       case "Registration":
         return <Registration logOut={this.logOut} notesIndex={this.notesIndex}></Registration>
         break;
       case "New Note":
-        return <NewNote notesIndex={this.notesIndex}></NewNote>
+        return <NewNote username={this.state.username} userid={this.state.user_id} token={this.state.token} notesIndex={this.notesIndex}></NewNote>
         break;
       case "Edit Note":
         return <EditNote notesIndex={this.notesIndex} note={this.state.note}></EditNote>
@@ -67,10 +76,13 @@ export default class App extends Component<Props> {
   }
 
   render() {
+    const cable = ActionCable.createConsumer("ws://localhost:4000/cable")
     return (
-      <Container>
-        {this.showing()}
-      </Container>
+      <ActionCableProvider cable={cable}>
+        <Container>
+          {this.showing()}
+        </Container>
+      </ActionCableProvider>
     );
   }
 }

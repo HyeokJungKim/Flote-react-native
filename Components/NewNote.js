@@ -1,13 +1,15 @@
 import React, {Component} from 'react'
 import { AsyncStorage, } from 'react-native'
 import { Container, Header, Left, Body, Title, Right, Content, Textarea, Form, Button, Text }from "native-base";
+import {ActionCable} from 'react-actioncable-provider'
 
 export default class NewNote extends Component {
 
   state={
     body: "",
     user_id: "",
-    token: ""
+    token: "",
+    username:""
   }
 
   home = () => {
@@ -24,10 +26,14 @@ export default class NewNote extends Component {
     this.createNote(auth)
   }
 
+  componentDidMount(){
+    this.getId()
+  }
+
   async getId() {
     try {
-      const value = await AsyncStorage.multiGet(['user_id', 'token']);
-      this.setState({user_id: value[0][1], token: value[1][1]})
+      const value = await AsyncStorage.multiGet(['user_id', 'token', 'username']);
+      this.setState({user_id: value[0][1], token: value[1][1], username: value[2][1]})
     } catch (error) {
       console.log("Error retrieving data" + error);
     }
@@ -65,10 +71,29 @@ export default class NewNote extends Component {
     }
   }
 
+
+
+
+
+  sendMessage = () => {
+      const note = this.state.body
+      const room = this.props.userid
+      // Call perform or send
+      this.refs.noteChannel.send({note, room})
+  }
+
+
+
+
+
+
+
+
   // const {navigate} = this.props.navigation
   render(){
     return(
-      <Container>
+    <Container>
+      <ActionCable ref='noteChannel' channel={{channel: 'NoteChannel', room: this.props.userid, username: this.props.username }} />
          <Header>
            <Left />
            <Body>
