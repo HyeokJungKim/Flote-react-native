@@ -20,6 +20,7 @@ export default class App extends Component<Props> {
   username: "",
   user_id: "",
   token: "",
+  index: ""
   }
 
   async clearAsyncStorage() {
@@ -52,7 +53,7 @@ export default class App extends Component<Props> {
   }
 
   noteEdit = (noteObj, index) => {
-    this.setState({showing: "Edit Note", note: noteObj})
+    this.setState({showing: "Edit Note", note: noteObj, index: index})
   }
 
   showing = () => {
@@ -70,7 +71,7 @@ export default class App extends Component<Props> {
         return <NewNote username={this.state.username} userid={this.state.user_id} token={this.state.token} notesIndex={this.notesIndex}></NewNote>
         break;
       case "Edit Note":
-        return <EditNote username={this.state.username} userid={this.state.user_id} token={this.state.token} notesIndex={this.notesIndex} note={this.state.note}></EditNote>
+        return <EditNote index={this.state.index} username={this.state.username} userid={this.state.user_id} token={this.state.token} notesIndex={this.notesIndex} note={this.state.note}></EditNote>
         break;
     }
   }

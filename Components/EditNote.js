@@ -17,7 +17,8 @@ export default class EditNote extends Component {
   }
 
   handleBody = (event) => {
-    this.setState({body: event})
+
+    this.setState({body: event}, () => this.SendEdit())
   }
 
   handleSubmit = () => {
@@ -54,6 +55,16 @@ export default class EditNote extends Component {
       })
   }
 
+  SendEdit = () => {
+    const body = this.state.body
+    const room = `edit_${this.props.note.id}`
+    const index = this.props.index
+    const id = this.props.note.id
+    const user = this.props.username
+    // Call perform or send
+    this.refs.realTimeTypingChannel.send({body, room, id, index, user})
+  }
+
   delete = () => {
     this.getId()
       .then(() => {
@@ -73,7 +84,7 @@ export default class EditNote extends Component {
     return(
       <Container>
 
-        <ActionCable ref='realTimeTypingChannel' channel={{channel: 'RealTimeTypingChannel', room: this.props.note.id, username: this.props.username}} onReceived={this.props.onEdit} />
+        <ActionCable ref='realTimeTypingChannel' channel={{channel: 'RealTimeTypingChannel', room: this.props.note.id, username: this.props.username}}/>
         <ActionCable ref='editChannel' channel={{channel: 'EditChannel', room: this.props.note.id, username: `${this.state.username}`}} />
 
          <Header>
