@@ -42,17 +42,38 @@ export default class NoteContainer extends Component {
   }
 
 
+  onDelete = (index, id) =>{
+      const i = parseInt(index)
+      const ego = parseInt(id)
+      if (
+        this.state.notes
+        && this.state.notes[i]
+        && this.state.notes[i].id === ego
+      ) {
+        this.setState({
+          notes: [...this.state.notes.slice(0,i),
+            ...this.state.notes.slice(i+1)]
+        })
+        // const act = 'delete'
+        // this.refs.noteChannel.send({id, index, act})
+      }
+    }
 
+    onReceived = (message) => {
+      console.log('received')
+      if (message.act !== "delete") {
+        this.setState({
+            notes: [message,
+                ...this.state.notes
+            ]
+        })
+        // console.log("notestatemessage", message)
+      } else {
+        this.onDelete(message.index, message.id)
+        // console.log("deletemessage", message)
+      }
 
-  onReceived = (note) => {
-    console.log('hit')
-      this.setState({
-          notes: [note,
-              ...this.state.notes
-          ]
-      })
-
-  }
+    }
 
   onEdit = (note) => {
       console.log('rt', note);
