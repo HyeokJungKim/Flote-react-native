@@ -68,8 +68,8 @@ export default class EditNote extends Component {
   delete = () => {
     this.getId()
       .then(() => {
-        fetch(`http://localhost:4000/notes/${this.props.note.id}`, {
-          method: 'DELETE',
+        fetch(`http://localhost:4000/notes/${this.props.note.id}/${this.props.index}`, {
+          method: 'delete',
           headers: {
             'Authorization': this.state.token,
           }
